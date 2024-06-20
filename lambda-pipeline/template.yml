@@ -1,0 +1,37 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Resources:
+  LambdaFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      CodeUri: .
+      MemorySize: 400
+      Timeout: 900
+      Environment:
+        Variables:
+          HF_ZEBRA_LLAMA_API_URL: !Ref HFZebraLlamaApiUrl
+          HACKATHON_API_KEY: !Ref HackathonApiKey
+          ANDREW_API_KEY: !Ref AndrewApiKey
+          RAG_PINECONE_INDEX: !Ref RagPineconeIndex
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /inference
+            Method: ANY
+
+Parameters:
+  HFZebraLlamaApiUrl:
+    Type: String
+    Description: "URL for the HF Zebra Llama API"
+  HackathonApiKey:
+    Type: String
+    Description: "API Key for Hackathon"
+  AndrewApiKey:
+    Type: String
+    Description: "API Key for Andrew"
+  RagPineconeIndex:
+    Type: String
+    Description: "Pinecone Index for RAG"

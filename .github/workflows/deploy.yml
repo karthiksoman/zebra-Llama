@@ -1,0 +1,70 @@
+name: Deploy to AWS Lambda
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'lambda-pipeline/**'
+      - '.github/**'
+      - 'app.py'
+      - 'Dockerfile'
+      - 'requirements.txt'
+      - 'template.yml'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Install dependencies
+        run: |
+          cd lambda-pipeline
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Install AWS SAM CLI
+        run: |
+          cd lambda-pipeline
+          pip install aws-sam-cli
+
+      - name: Build with SAM  
+        run: |
+          cd lambda-pipeline
+          sam build
+
+      - name: Deploy with SAM
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          HFZEBRA_LLAMA_API_URL: ${{ secrets.HF_ZEBRA_LLAMA_API_URL }}
+          HACKATHON_API_KEY: ${{ secrets.HACKATHON_API_KEY }}
+          ANDREW_API_KEY: ${{ secrets.ANDREW_API_KEY }}
+          RAG_PINECONE_INDEX: ${{ secrets.RAG_PINECONE_INDEX }}
+        run: |
+          cd lambda-pipeline
+          sam deploy \
+            --stack-name zebra-llama-stack \
+            --resolve-s3 \
+            --s3-prefix zebra-llama-stack \
+            --region ${{ secrets.AWS_DEFAULT_REGION }} \
+            --confirm-changeset \
+            --capabilities CAPABILITY_IAM \
+            --parameter-overrides \
+              HFZebraLlamaApiUrl=${{ secrets.HF_ZEBRA_LLAMA_API_URL }} \
+              HackathonApiKey=${{ secrets.HACKATHON_API_KEY }} \
+              AndrewApiKey=${{ secrets.ANDREW_API_KEY }} \
+              RagPineconeIndex=${{ secrets.RAG_PINECONE_INDEX }}
+              
+      - name: Verify Deployment
+        run: |
+          aws cloudformation describe-stacks --stack-name zebra-llama-stack
