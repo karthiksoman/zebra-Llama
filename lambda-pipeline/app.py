@@ -17,11 +17,11 @@ headers = {
     "Content-Type": "application/json"
 }
 
-def get_model_response(input_text):
+def get_model_response(input_text, temperature: float = 0.7):
     payload = {
         "inputs": input_text,
         "parameters": {
-            "temperature": 0.7,
+            "temperature": temperature,
             "max_new_tokens": 256,
             "stop_sequences": ['End of response'],
             "return_full_text": False,
@@ -73,7 +73,7 @@ def format_prompt(user_message, rag_context, system_prompt):
     '''
     return formatted_prompt
 
-def inference(input_text):
+def inference(input_text, temperature: float = 0.7):
     system_prompt = '''
     You are an expert in the rare disease Ehlers-Danlos syndrome (EDS).
     You are supposed to answer the question asked by the user.
@@ -87,7 +87,7 @@ def inference(input_text):
     try:
         rag_context = get_rag_context(input_text)
         formatted_prompt = format_prompt(input_text, rag_context, system_prompt)
-        response = get_model_response(formatted_prompt)
+        response = get_model_response(formatted_prompt, temperature)
         return json.dumps(response)
     except Exception as e:
         logging.error(f"Error during inference: {str(e)}")
@@ -99,7 +99,8 @@ def lambda_handler(event, context):
     try:
         body = json.loads(event['body'])
         input_text = body.get('text', None)
-        response = inference(input_text)
+        temperature = body.get('temperature', 0.7)
+        response = inference(input_text, temperature)
         return {
             "statusCode": 200,
             "headers": {
