@@ -57,14 +57,14 @@ jobs:
             --resolve-s3 \
             --s3-prefix zebra-llama-stack \
             --region ${{ secrets.AWS_DEFAULT_REGION }} \
-            --confirm-changeset \
+            --no-confirm-changeset \
             --capabilities CAPABILITY_IAM \
             --parameter-overrides \
               HFZebraLlamaApiUrl=${{ secrets.HF_ZEBRA_LLAMA_API_URL }} \
               HackathonApiKey=${{ secrets.HACKATHON_API_KEY }} \
               AndrewApiKey=${{ secrets.ANDREW_API_KEY }} \
               RagPineconeIndex=${{ secrets.RAG_PINECONE_INDEX }}
-              
+
       - name: Verify Deployment
         run: |
           aws cloudformation describe-stacks --stack-name zebra-llama-stack
