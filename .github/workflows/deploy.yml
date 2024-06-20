@@ -63,4 +63,4 @@ jobs:
               HFZebraLlamaApiUrl=${{ secrets.HF_ZEBRA_LLAMA_API_URL }} \
               HackathonApiKey=${{ secrets.HACKATHON_API_KEY }} \
               AndrewApiKey=${{ secrets.ANDREW_API_KEY }} \
-              RagPineconeIndex=${{ secrets.RAG_PINECONE_INDEX }}
+              RagPineconeIndex=${{ secrets.RAG_PINECONE_INDEX }} || echo "No changes to deploy."
