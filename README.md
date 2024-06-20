@@ -18,7 +18,7 @@ Refer to [config](https://github.com/karthiksoman/zebra-Llama/blob/main/code/fin
 
 We have also provided the [training](https://github.com/karthiksoman/zebra-Llama/blob/main/code/finetuning/train.py) script that was used to fine-tune the Llama-3-8b-instruct model
 
-<img src="https://github.com/karthiksoman/zebra-Llama/assets/42702311/afacb5ac-1100-47d9-92f5-dbdf3ea0d5b6" style="max-height: 75px; max-width: 75px;" />
+<img src="https://github.com/karthiksoman/zebra-Llama/assets/42702311/afacb5ac-1100-47d9-92f5-dbdf3ea0d5b6" style="width: 700px;" />
 
 # Team behind zebra-Llama
 
