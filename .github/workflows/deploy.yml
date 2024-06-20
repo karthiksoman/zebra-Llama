@@ -64,7 +64,3 @@ jobs:
               HackathonApiKey=${{ secrets.HACKATHON_API_KEY }} \
               AndrewApiKey=${{ secrets.ANDREW_API_KEY }} \
               RagPineconeIndex=${{ secrets.RAG_PINECONE_INDEX }}
-
-      - name: Verify Deployment
-        run: |
-          aws cloudformation describe-stacks --stack-name zebra-llama-stack
