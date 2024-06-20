@@ -12,3 +12,13 @@ https://huggingface.co/zebraLLAMA/zebra-Llama-v0.1
 Refer to [config](https://github.com/karthiksoman/zebra-Llama/blob/main/code/finetuning/model_config.yaml) file to know the training parameters
 
 We have also provided the [training](https://github.com/karthiksoman/zebra-Llama/blob/main/code/finetuning/train.py) script that was used to fine-tune the Llama-3-8b-instruct model
+
+# Team behind zebra-Llama
+
+- [Karthik Soman](https://github.com/karthiksoman)
+- [Andrew Langdon](https://github.com/AndrewLngdn)
+- [Chinmay Agrawal](https://github.com/ch1nmay7898)
+- [Catalina Villouta](https://github.com/mcvillouta)
+- [Orion Buske](https://github.com/buske)
+- [Lashaw Salta](https://github.com/lashaws)
+- [David Harris](https://github.com/d20rvafdln)
