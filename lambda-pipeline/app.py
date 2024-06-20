@@ -4,6 +4,7 @@ import os
 from llama_index.core import Settings
 from llama_index.embeddings.openai import OpenAIEmbedding
 from pinecone import Pinecone
+from huggingface_hub import InferenceClient
 import json
 import logging
 
@@ -18,20 +19,15 @@ headers = {
 }
 
 def get_model_response(input_text, temperature: float = 0.7):
-    payload = {
-        "inputs": input_text,
-        "parameters": {
-            "temperature": temperature,
-            "max_new_tokens": 256,
-            "stop_sequences": ['End of response'],
-            "return_full_text": False,
-            "frequency_penalty": 1
-        }
-    }
     try:
-        response = requests.post(API_URL, headers=headers, json=payload)
-        response.raise_for_status()
-        return response.json()[0]['generated_text']
+        client = InferenceClient(API_URL)
+        response = client.text_generation(input_text, 
+                                      max_new_tokens=512,
+                                      stop_sequences=['End of response'],
+                                      stream=False,
+                                      temperature=temperature
+                                     )
+        return response
     except requests.RequestException as e:
         logging.error(f"Failed to get model response: {str(e)}")
         return None
@@ -78,8 +74,10 @@ def inference(input_text, temperature: float = 0.7):
     You are an expert in the rare disease Ehlers-Danlos syndrome (EDS).
     You are supposed to answer the question asked by the user.
     Your response should be grounded on the given Context in the user message.
+    Always make sure to provide references in your answer.
+    You can find the references in the Context marked as '(Ref: '.
     If no context is given, try to answer as accurately as possible. 
-    If you don't know the answer, admit that you don't instead of making one up.   
+    If you don't know the answer, admit that you don't instead of making one up.  
     '''
     if not input_text:
         logging.error("No input text provided")

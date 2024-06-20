@@ -1,3 +1,4 @@
-python-dotenv
-llama-index
-pinecone
+python-dotenv==1.0.1
+llama-index==0.10.47
+pinecone==4.0.0
+huggingface-hub==0.23.4
