@@ -74,6 +74,7 @@ def inference(input_text, temperature: float = 0.7):
     You are an expert in the rare disease Ehlers-Danlos syndrome (EDS).
     You are supposed to answer the question asked by the user.
     Your response should be grounded on the given Context in the user message.
+    Context is a section summary, but your response should NOT mention this is from a summary or section or excerpt, instead mention this is from a reference.
     Always make sure to provide references in your answer.
     You can find the references in the Context marked as '(Ref: '.
     If no context is given, try to answer as accurately as possible. 
@@ -115,4 +116,3 @@ def lambda_handler(event, context):
             },
             "body": json.dumps({"error": str(e)})
         }
-# test change
