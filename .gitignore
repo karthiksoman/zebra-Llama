@@ -1,3 +1,4 @@
+manuscript/
 # lambda-pipeline
 lambda-pipeline/.aws-sam/
 lambda-pipeline/env.json
