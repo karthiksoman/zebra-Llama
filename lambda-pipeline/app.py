@@ -32,7 +32,7 @@ def get_model_response(input_text, temperature: float = 0.7):
         logging.error(f"Failed to get model response: {str(e)}")
         return None
 
-def get_rag_context(query, top_k=2):
+def get_rag_context(query, top_k=1):
     try:
         embed_model = OpenAIEmbedding(
             model='text-embedding-ada-002',
