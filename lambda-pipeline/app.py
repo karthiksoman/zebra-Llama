@@ -32,7 +32,7 @@ def get_model_response(input_text, temperature: float = 0.7):
         logging.error(f"Failed to get model response: {str(e)}")
         return None
 
-def get_rag_context(query, top_k=1):
+def get_rag_context(query, top_k=3):
     try:
         embed_model = OpenAIEmbedding(
             model='text-embedding-ada-002',
@@ -46,13 +46,16 @@ def get_rag_context(query, top_k=1):
             vector=query_embedding,
             top_k=top_k,
             include_metadata=True
-        )
-        # extracted_context_summary = list(map(lambda x: json.loads(x.metadata['_node_content'])['metadata']['section_summary'], retrieved_doc.matches))
-        extracted_context_summary = list(map(lambda x: json.loads(x.metadata['_node_content'])['metadata']['text'], retrieved_doc.matches))
+        )        
+        extracted_context_text = list(map(lambda x: json.loads(x.metadata['_node_content'])['metadata']['text'], [retrieved_doc.matches[0]]))
         provenance = list(map(lambda x: x.metadata['c_document_id'], retrieved_doc.matches))
         context = ''
-        for i in range(top_k):
-            context += extracted_context_summary[i] + '(Ref: ' + provenance[i] + '). '
+        for i in range(1):
+            context += extracted_context_text[i] + '(Ref: ' + provenance[i] + '). '
+        extracted_context_summary = list(map(lambda x: json.loads(x.metadata['_node_content'])['metadata']['section_summary'], retrieved_doc.matches[1:]))
+        provenance_for_summary = list(map(lambda x: x.metadata['c_document_id'], retrieved_doc.matches[1:]))
+        for i in range(top_k-1):
+            context += extracted_context_summary[i] + '(Ref: ' + provenance_for_summary[i] + '). '
         return context
     except Exception as e:
         logging.error(f"Failed to retrieve or process context: {str(e)}")
