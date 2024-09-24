@@ -22,7 +22,7 @@ def get_model_response(input_text, temperature: float = 0.7):
     try:
         client = InferenceClient(API_URL)
         response = client.text_generation(input_text, 
-                                      max_new_tokens=1500,
+                                      max_new_tokens=1024,
                                       stop_sequences=['End of response'],
                                       stream=False,
                                       temperature=temperature
