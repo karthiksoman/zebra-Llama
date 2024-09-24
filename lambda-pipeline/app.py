@@ -87,19 +87,13 @@ def inference(input_text, temperature: float = 0.7):
 
     1. Begin with a broad overview that directly addresses the main question.
     2. Provide detailed information using both the given Context and your trained knowledge about EDS. Aim for a balance between these sources.
-    3. Always cite your sources:
-       - For information from the Context, use the provided references marked as '(Ref: '.
-       - For information from your trained knowledge, indicate this clearly (e.g., "According to general medical understanding...").
+    3. Answer in multiple paragraphs and be comprehensive in your answer
     4. Structure your response logically:
        a) Start with a general answer to the question.
-       b) Provide specific examples or details, always with proper citations.
+       b) Provide specific examples or details, always with proper citations (use the provided references marked as '(Ref: ').
        c) If relevant, mention any contradictions or areas of ongoing research.
-    5. Ensure all information is relevant to the question asked. Avoid tangential information unless it's crucial for understanding.
-    6. If mentioning specific studies or cases, clearly state their relevance to the main question and provide proper context.
-    7. Use accessible language, explaining medical terms when necessary.
-    8. If the available information (from Context and your knowledge) is insufficient to fully answer the question, clearly state this limitation.
-    9. Conclude with a brief summary of the key points, if the answer is lengthy.
-    10. Always prioritize accuracy over completeness. If you're unsure about any information, express this uncertainty clearly.
+    5. If mentioning specific studies or cases, clearly state their relevance to the main question and provide proper context.
+    6. Conclude with a brief summary of the key points, if the answer is lengthy.    
 
     Remember, your goal is to provide clear, accurate, and well-supported information about EDS, directly addressing the user's question while providing a comprehensive view of the topic.
     '''
