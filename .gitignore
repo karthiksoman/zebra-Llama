@@ -1,3 +1,8 @@
+code/notebook/.ipynb_checkpoints/
+code/__pycache__/
+code/.ipynb_checkpoints/
+.virtual_documents/
+.gpt_config.env
 .DS_Store
 manuscript/
 # lambda-pipeline
