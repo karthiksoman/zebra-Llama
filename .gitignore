@@ -1,3 +1,4 @@
+.DS_Store
 manuscript/
 # lambda-pipeline
 lambda-pipeline/.aws-sam/
