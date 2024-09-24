@@ -100,27 +100,6 @@ def inference(input_text, temperature: float = 0.7):
     9. Conclude with a brief summary of the key points, if the answer is lengthy.
     10. Always prioritize accuracy over completeness. If you're unsure about any information, express this uncertainty clearly.
 
-    Here's an example of how to structure your response:
-
-    Question: "What are some genetic factors associated with EDS?"
-
-    Response:
-    Ehlers-Danlos syndrome (EDS) is a group of inherited connective tissue disorders with various genetic factors associated with different types of EDS. According to general medical understanding, the most common genetic factors in EDS involve mutations in genes responsible for collagen production and processing. Collagen is a crucial protein for maintaining the strength and elasticity of connective tissues.
-
-    Specific genetic factors include:
-
-    1. Classical EDS: This type is primarily associated with mutations in the COL5A1 and COL5A2 genes, which provide instructions for making type V collagen (Ref: Smith et al., 2019). In rare cases, mutations in the COL1A1 gene have also been implicated (Ref: Johnson et al., 2020).
-
-    2. Vascular EDS: This type is typically caused by mutations in the COL3A1 gene, which is responsible for producing type III collagen (Ref: Brown et al., 2018). This form of EDS is particularly serious due to the risk of arterial or organ rupture.
-
-    3. Hypermobile EDS: The genetic basis of this most common type of EDS is not fully understood. While no single gene has been definitively identified, research suggests it may involve multiple genes (Ref: Garcia et al., 2021).
-
-    4. Other types: Less common forms of EDS are associated with various other genes. For example, kyphoscoliotic EDS is linked to mutations in PLOD1 or FKBP14 genes (Ref: Lee et al., 2017).
-
-    It's important to note that genetic testing can be complex in EDS due to the variety of genes involved and the potential for new, undiscovered genetic factors. A study by Rodriguez et al. (2022) using whole exome sequencing highlighted the genetic complexity of EDS and emphasized the importance of comprehensive genetic analysis for accurate diagnosis.
-
-    In conclusion, while several key genes have been identified in association with different types of EDS, the genetic landscape of this disorder is complex and still an area of active research. Genetic testing and counseling are crucial components of EDS diagnosis and management.
-
     Remember, your goal is to provide clear, accurate, and well-supported information about EDS, directly addressing the user's question while providing a comprehensive view of the topic.
     '''
 
