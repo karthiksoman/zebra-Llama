@@ -115,6 +115,7 @@ def inference(input_text, temperature: float = 0.7):
         return json.dumps({"error": "No input text provided"}), 400
     try:
         rag_context = get_rag_context(input_text)
+        input_text = input_text + " Try to return multiple views for the user's question."
         formatted_prompt = format_prompt(input_text, rag_context, system_prompt)
         response = get_model_response(formatted_prompt, temperature)
         return json.dumps(response)
