@@ -50,6 +50,7 @@ jobs:
           HACKATHON_API_KEY: ${{ secrets.HACKATHON_API_KEY }}
           ANDREW_API_KEY: ${{ secrets.ANDREW_API_KEY }}
           RAG_PINECONE_INDEX: ${{ secrets.RAG_PINECONE_INDEX }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         run: |
           cd lambda-pipeline
           sam deploy \
