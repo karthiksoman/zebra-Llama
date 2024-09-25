@@ -7,6 +7,7 @@ from pinecone import Pinecone
 from huggingface_hub import InferenceClient
 import json
 import logging
+from groq import Groq
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -17,6 +18,25 @@ headers = {
     "Accept": "application/json",
     "Content-Type": "application/json"
 }
+
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
+def get_groq_response(instruction, system_prompt, chat_model, temperature=0.3):
+    groq_client = Groq(
+        api_key=GROQ_API_KEY,
+    )
+    chat_completion = groq_client.chat.completions.create(
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": instruction}
+        ],
+        model=chat_model,
+        temperature=temperature
+    )
+    if chat_completion.choices:
+        return chat_completion.choices[0].message.content
+    else:
+        return 'Unexpected response'
+
 
 def get_model_response(input_text, temperature: float = 0.7):
     try:
@@ -32,7 +52,7 @@ def get_model_response(input_text, temperature: float = 0.7):
         logging.error(f"Failed to get model response: {str(e)}")
         return None
 
-def get_rag_context(query, top_k=2):
+def get_rag_context(query, top_k=3):
     try:
         embed_model = OpenAIEmbedding(
             model='text-embedding-ada-002',
@@ -46,16 +66,13 @@ def get_rag_context(query, top_k=2):
             vector=query_embedding,
             top_k=top_k,
             include_metadata=True
-        )        
-        extracted_context_text = list(map(lambda x: json.loads(x.metadata['_node_content'])['metadata']['text'], [retrieved_doc.matches[0]]))
+        )
+        # extracted_context_summary = list(map(lambda x: json.loads(x.metadata['_node_content'])['metadata']['section_summary'], retrieved_doc.matches))
+        extracted_context_summary = list(map(lambda x: json.loads(x.metadata['_node_content'])['metadata']['text'], retrieved_doc.matches))
         provenance = list(map(lambda x: x.metadata['c_document_id'], retrieved_doc.matches))
         context = ''
-        for i in range(1):
-            context += extracted_context_text[i] + '(Ref: ' + provenance[i] + '). '
-        extracted_context_summary = list(map(lambda x: json.loads(x.metadata['_node_content'])['metadata']['section_summary'], retrieved_doc.matches[1:]))
-        provenance_for_summary = list(map(lambda x: x.metadata['c_document_id'], retrieved_doc.matches[1:]))
-        for i in range(top_k-1):
-            context += extracted_context_summary[i] + '(Ref: ' + provenance_for_summary[i] + '). '
+        for i in range(top_k):
+            context += extracted_context_summary[i] + '(Ref: ' + provenance[i] + '). '
         return context
     except Exception as e:
         logging.error(f"Failed to retrieve or process context: {str(e)}")
@@ -85,39 +102,47 @@ def inference(input_text, temperature: float = 0.7):
     # If you don't know the answer, admit that you don't instead of making one up.  
     # '''
 
-    system_prompt = '''
-    You are an expert in the rare disease Ehlers-Danlos syndrome (EDS).
-    Start with a broad overview that directly addresses the question asked by the user.
-    Then, you are supposed to answer the question asked by the user in a detailed and comprehensive fashion based on your internal knowledge and the Context provided in the user message.
-    This is important: Always make sure to provide references/citations in your answer.
-    You can find the references in the Context marked as '(Ref: '. 
-    If you don't know the answer, admit that you don't instead of making one up.  
-    '''
-
     # system_prompt = '''
-    # You are an expert AI assistant specializing in Ehlers-Danlos syndrome (EDS). Your role is to provide comprehensive, accurate, and well-structured answers about EDS. Follow these guidelines:
-
-    # 1. Begin with a broad overview that directly addresses the main question.
-    # 2. Provide detailed information using both the given Context and your trained knowledge about EDS. Aim for a balance between these sources.
-    # 3. Answer in multiple paragraphs and be comprehensive in your answer
-    # 4. Structure your response logically:
-    #    a) Start with a general answer to the question.
-    #    b) Provide specific examples or details, always with proper citations (use the provided references marked as '(Ref: ').
-    #    c) If relevant, mention any contradictions or areas of ongoing research.
-    # 5. If mentioning specific studies or cases, clearly state their relevance to the main question and provide proper context.
-    # 6. Conclude with a brief summary of the key points, if the answer is lengthy.    
-
-    # Remember, your goal is to provide clear, accurate, and well-supported information about EDS, directly addressing the user's question while providing a comprehensive view of the topic.
+    # You are an expert in the rare disease Ehlers-Danlos syndrome (EDS).
+    # Start with a broad overview that directly addresses the question asked by the user.
+    # Then, you are supposed to answer the question asked by the user in a detailed and comprehensive fashion based on your internal knowledge and the Context provided in the user message.
+    # This is important: Always make sure to provide references/citations in your answer.
+    # You can find the references in the Context marked as '(Ref: '. 
+    # If you don't know the answer, admit that you don't instead of making one up.  
     # '''
+
+    system_prompt = '''
+    You are an expert AI assistant specializing in Ehlers-Danlos syndrome (EDS). Your role is to provide comprehensive, accurate, and well-structured answers about EDS. Follow these guidelines:
+
+    1. Begin with a broad overview that directly addresses the main question.
+    2. Provide detailed information using both the given Context and your trained knowledge about EDS. Aim for a balance between these sources.
+    3. Answer in multiple paragraphs and be comprehensive in your answer
+    4. Structure your response logically:
+       a) Start with a general answer to the question.
+       b) Provide specific examples or details, always with proper citations (use the provided references marked as '(Ref: ').
+       c) If relevant, mention any contradictions or areas of ongoing research.
+    5. If mentioning specific studies or cases, clearly state their relevance to the main question and provide proper context.
+    6. Conclude with a brief summary of the key points, if the answer is lengthy.    
+
+    Remember, your goal is to provide clear, accurate, and well-supported information about EDS, directly addressing the user's question while providing a comprehensive view of the topic.
+    '''
 
     if not input_text:
         logging.error("No input text provided")
         return json.dumps({"error": "No input text provided"}), 400
     try:
         rag_context = get_rag_context(input_text)
-        input_text = input_text + " Try to return multiple views for the user's question."
         formatted_prompt = format_prompt(input_text, rag_context, system_prompt)
-        response = get_model_response(formatted_prompt, temperature)
+        # response = get_model_response(formatted_prompt, temperature)
+
+        # Groq layer (this is a temporary fix, until the huggingface issue is resolved)
+        instruction_prompt = f'''
+        User message: {input_text}
+        Context : {rag_context}
+        Always make sure to provide references in your answer. You can find the references in the Context marked as '(Ref: '.
+        '''
+        response = get_groq_response(instruction_prompt, system_prompt, "llama3-8b-8192", temperature=temperature)
+        
         return json.dumps(response)
     except Exception as e:
         logging.error(f"Error during inference: {str(e)}")
