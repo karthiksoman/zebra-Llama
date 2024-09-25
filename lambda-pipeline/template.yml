@@ -15,6 +15,7 @@ Resources:
           HACKATHON_API_KEY: !Ref HackathonApiKey
           ANDREW_API_KEY: !Ref AndrewApiKey
           RAG_PINECONE_INDEX: !Ref RagPineconeIndex
+          GROQ_API_KEY: !Ref GroqApiKey
       Events:
         Api:
           Type: Api
@@ -35,3 +36,6 @@ Parameters:
   RagPineconeIndex:
     Type: String
     Description: "Pinecone Index for RAG"
+  GroqApiKey:
+    Type: String
+    Description: "API Key for Groq"
