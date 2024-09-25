@@ -54,7 +54,7 @@ def get_model_response(input_text, temperature: float = 0.7):
         logging.error(f"Failed to get model response: {str(e)}")
         return None
 
-def get_rag_context(query, top_k=3):
+def get_rag_context(query, top_k=5):
     try:
         embed_model = OpenAIEmbedding(
             model='text-embedding-ada-002',
@@ -114,7 +114,7 @@ def inference(input_text, temperature: float = 0.7):
     # '''
 
     system_prompt = '''
-    You are an expert AI assistant specializing in Ehlers-Danlos syndrome (EDS). Your role is to provide comprehensive, accurate, and well-structured answers about EDS. Follow these guidelines:
+    You are an expert AI assistant specializing in Ehlers-Danlos syndrome (EDS). Your role is to provide comprehensive, accurate, and well-structured answers about EDS. Try to give your response in an elegant Markdown format and in multiple paragraphs. Follow these guidelines:
 
     1. In the first paragraph, begin with a broad overview that directly addresses the main question.
     2. In the second paragraph, provide detailed information mainly by using the given Context. Also use your trained knowledge about EDS to supplement the assertions. Aim for a balance between these sources.
@@ -125,8 +125,7 @@ def inference(input_text, temperature: float = 0.7):
        c) If relevant, mention any contradictions or areas of ongoing research.
     5. If mentioning specific studies or cases, clearly state their relevance to the main question and provide proper context.
     6. In the last paragraph, conclude with a brief summary of the key points, if the answer is lengthy.    
-
-    Try to give your response in an elegant Markdown format.
+    
     '''
 
     if not input_text:
