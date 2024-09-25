@@ -125,7 +125,7 @@ def inference(input_text, temperature: float = 0.7):
        c) If relevant, mention any contradictions or areas of ongoing research.
     5. If mentioning specific studies or cases, clearly state their relevance to the main question and provide proper context.
     6. In the last paragraph, conclude with a brief summary of the key points, if the answer is lengthy.    
-    IMPORTANT: If you encounter a question that is not related to EDS disease, then state that in your response and do not answer that question.
+    IMPORTANT: If you receive a question unrelated to Ehlers-Danlos Syndrome (EDS), respond directly by stating that the question is not related, without providing any additional context or explanations.
     
     '''
 
