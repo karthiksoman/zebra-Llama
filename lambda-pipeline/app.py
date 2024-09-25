@@ -21,6 +21,8 @@ headers = {
 
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 def get_groq_response(instruction, system_prompt, chat_model, temperature=0.3):
+    if not GROQ_API_KEY:
+        raise ValueError("GROQ_API_KEY is not set in the environment variables")
     groq_client = Groq(
         api_key=GROQ_API_KEY,
     )
@@ -144,6 +146,9 @@ def inference(input_text, temperature: float = 0.7):
         response = get_groq_response(instruction_prompt, system_prompt, "llama3-8b-8192", temperature=temperature)
         
         return json.dumps(response)
+    except ValueError as ve:
+        logging.error(f"Configuration error: {str(ve)}")
+        return json.dumps({"error": str(ve)}), 500
     except Exception as e:
         logging.error(f"Error during inference: {str(e)}")
         return json.dumps({"error": str(e)}), 500
