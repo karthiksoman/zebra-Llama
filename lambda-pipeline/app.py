@@ -126,7 +126,7 @@ def inference(input_text, temperature: float = 0.7):
     5. If mentioning specific studies or cases, clearly state their relevance to the main question and provide proper context.
     6. In the last paragraph, conclude with a brief summary of the key points, if the answer is lengthy.    
 
-    Remember, your goal is to provide clear, accurate, and well-supported information about EDS, directly addressing the user's question while providing a comprehensive view of the topic.
+    Try to give your response in an elegant Markdown format.
     '''
 
     if not input_text:
