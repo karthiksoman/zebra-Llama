@@ -8,7 +8,7 @@ The model is trained using a specialized approach called "context-aware training
 
 [Here](https://github.com/karthiksoman/zebra-Llama/tree/main/code/notebook) is the Jupyter Notebook Demo for Zebra-Llama.
 
-[Here] is the API for the RAG knowledge base that we built for rare diseases, currently focussing on EDS.
+[Here](https://zebra-llama-rag.onrender.com/) is the API for the RAG knowledge base that we built for rare diseases, currently focussing on EDS.
 
 # Hugging face Model card
 
